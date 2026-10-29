@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Create your account{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+  <div class="auth-story">
+    <span class="eyebrow eyebrow-light">Your next trip starts here</span>
+    <h1>A little less<br>searching.<br><span>A little more going.</span></h1>
+    <p>Save your trip preferences and come back whenever you're ready to discover another corner of India.</p>
+    <div class="auth-story-art" aria-hidden="true"><div></div><span></span></div>
+  </div>
+
+  <div class="auth-card">
+    <a class="back-link" href="{{ url_for('home') }}">← Back to home</a>
+    <span class="eyebrow">Make yourself at home</span>
+    <h2>Create your account</h2>
+    <p class="auth-subtitle">Just a few details, then the fun part.</p>
+
+    {% if errors %}
+      <div class="form-errors" role="alert">
+        {% for error in errors %}<p>{{ error }}</p>{% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post" class="form-stack">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <label for="username">Name you'll use here</label>
+      <input id="username" name="username" type="text" autocomplete="username" minlength="2" maxlength="32" value="{{ username }}" required>
+      <label for="email">Email address</label>
+      <input id="email" name="email" type="email" autocomplete="email" value="{{ email }}" required>
+      <label for="password">Password <span class="label-hint">at least 8 characters</span></label>
+      <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required>
+      <button class="button button-dark button-full" type="submit">Create my account <span aria-hidden="true">→</span></button>
+    </form>
+    <p class="auth-switch">Already planned with us? <a href="{{ url_for('login') }}">Sign in</a></p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Plan my trip{% endblock %}
+
+{% block content %}
+<section class="planner-page">
+  <a class="back-link" href="{{ url_for('dashboard') }}">← Back to my trips</a>
+  <div class="planner-heading">
+    <span class="eyebrow">A few details, then away you go</span>
+    <h1>What sounds like<br><span>your kind of trip?</span></h1>
+    <p>There are no wrong answers. We'll use these three clues to find places that make sense for you.</p>
+  </div>
+
+  <form class="planner-form" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <fieldset class="planner-step">
+      <legend><span>01</span> What feels comfortable to spend?</legend>
+      <p class="field-description">Budget per person for your stay, food and local travel. Getting to the destination isn't included.</p>
+      <div class="budget-control">
+        <input
+          type="range"
+          id="budget"
+          name="budget"
+          min="2000"
+          max="60000"
+          step="1000"
+          value="{{ preferences['budget'] if preferences else 18000 }}"
+          aria-describedby="budget-help">
+        <output class="budget-value" for="budget" id="budget-value">₹18,000</output>
+      </div>
+      <div class="range-labels" id="budget-help"><span>₹2,000</span><span>₹60,000</span></div>
+    </fieldset>
+
+    <fieldset class="planner-step">
+      <legend><span>02</span> How much time do you have?</legend>
+      <p class="field-description">Count the days you'll spend at your destination.</p>
+      <div class="duration-options">
+        {% for days in [2, 3, 5, 7, 10, 14] %}
+          <label class="duration-option">
+            <input type="radio" name="trip_days" value="{{ days }}" {% if preferences and preferences["trip_days"] == days %}checked{% elif not preferences and days == 5 %}checked{% endif %}>
+            <span>{{ days }} <small>days</small></span>
+          </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    <fieldset class="planner-step planner-step-type">
+      <legend><span>03</span> What are you in the mood for?</legend>
+      <p class="field-description">Choose the kind of place you'd be happiest to explore.</p>
+      <div class="type-options">
+        {% set selected_type = preferences["destination_type"] if preferences else "nature" %}
+        {% for kind in [
+          ("nature", "Nature & hills", "Mountain air, green trails and quiet views"),
+          ("beach", "Beaches & islands", "Coastal days and time by the sea"),
+          ("culture", "Culture & heritage", "Historic places and local stories"),
+          ("adventure", "Adventure", "Outdoor activities and active days"),
+          ("spiritual", "Spiritual & peaceful", "Sacred places and a slower pace")
+        ] %}
+          <label class="type-option">
+            <input type="radio" name="destination_type" value="{{ kind[0] }}" {% if selected_type == kind[0] %}checked{% endif %}>
+            <span class="type-copy"><strong>{{ kind[1] }}</strong><small>{{ kind[2] }}</small></span>
+            <span class="type-check" aria-hidden="true"></span>
+          </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    <div class="planner-submit">
+      <p>You'll see your three best matches—and exactly how each one scored.</p>
+      <button class="button button-orange" type="submit">Find my places <span aria-hidden="true">→</span></button>
+    </div>
+  </form>
+</section>
+{% endblock %}

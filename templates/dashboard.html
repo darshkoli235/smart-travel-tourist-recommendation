@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}My trips{% endblock %}
+
+{% block content %}
+<section class="dashboard-page">
+  <div class="dashboard-welcome">
+    <div>
+      <span class="eyebrow">Your personal travel corner</span>
+      <h1>Welcome, {{ current_user["username"] }}.</h1>
+      <p>Whether you're ready to go or just daydreaming, your next trip can start here.</p>
+    </div>
+    <div class="dashboard-sun" aria-hidden="true"><span></span></div>
+  </div>
+
+  <div class="dashboard-grid">
+    <article class="dashboard-main-card">
+      <span class="card-index">YOUR NEXT STEP</span>
+      <div class="dashboard-card-mark" aria-hidden="true">→</div>
+      <h2>Give us three little clues.</h2>
+      <p>Set your budget, how long you have and what kind of place feels right. We'll bring you back three ideas and show our working.</p>
+      <a class="button button-orange" href="{{ url_for('plan_trip') }}">Plan my trip <span aria-hidden="true">→</span></a>
+    </article>
+
+    <aside class="dashboard-side-card">
+      <span class="card-index">YOUR LAST SEARCH</span>
+      {% if preferences %}
+        <h2>Ready for another look?</h2>
+        <div class="saved-facts">
+          <div><span>Budget</span><strong>₹{{ "{:,}".format(preferences["budget"]) }}</strong></div>
+          <div><span>Time away</span><strong>{{ preferences["trip_days"] }} days</strong></div>
+          <div><span>You're drawn to</span><strong>{{ preferences["destination_type"]|title }}</strong></div>
+        </div>
+        <a class="text-link" href="{{ url_for('recommendations') }}">See those recommendations →</a>
+      {% else %}
+        <h2>Nothing to pack just yet.</h2>
+        <p>Your first set of recommendations will appear here after you plan a trip.</p>
+        <span class="side-note">A little curiosity is all you need.</span>
+      {% endif %}
+    </aside>
+  </div>
+
+  <p class="dashboard-footnote"><span aria-hidden="true">✳</span> Your saved preferences stay on this device's project database, not on a travel website.</p>
+</section>
+{% endblock %}

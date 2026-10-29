@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Your trip ideas{% endblock %}
+
+{% block content %}
+<section class="results-page">
+  <a class="back-link" href="{{ url_for('dashboard') }}">← Back to my trips</a>
+  <div class="results-heading">
+    <div>
+      <span class="eyebrow">A few places that fit your clues</span>
+      <h1>Where could you<br><span>see yourself?</span></h1>
+    </div>
+    <a class="button button-outline" href="{{ url_for('plan_trip') }}">Change my preferences</a>
+  </div>
+
+  <div class="preference-summary">
+    <span>YOUR TRIP, IN THREE CLUES</span>
+    <strong>₹{{ "{:,}".format(preferences["budget"]) }} budget</strong>
+    <i aria-hidden="true"></i>
+    <strong>{{ preferences["trip_days"] }} days</strong>
+    <i aria-hidden="true"></i>
+    <strong>{{ preferences["destination_type"]|title }}</strong>
+  </div>
+
+  <div class="recommendation-grid">
+    {% for destination in recommendations %}
+      <article class="recommendation-card">
+        <div class="result-visual scene-art scene--{{ destination['art'] }}" aria-hidden="true">
+          <span class="scene-sun"></span><span class="scene-back"></span><span class="scene-front"></span>
+          <span class="scene-water"></span>
+          <span class="result-number">0{{ destination["rank"] }}</span>
+          <span class="result-score">{{ destination["matched_count"] }}/3 rules match</span>
+        </div>
+        <div class="recommendation-content">
+          <span class="destination-region">{{ destination["region"] }}</span>
+          <div class="recommendation-title">
+            <h2>{{ destination["name"] }}</h2>
+            {% if destination["proof"]["is_strong_match"] %}
+              <span class="fit-badge">Strong match</span>
+            {% else %}
+              <span class="fit-badge fit-badge-soft">Another option</span>
+            {% endif %}
+          </div>
+          <p>{{ destination["description"] }}</p>
+          <dl class="destination-facts">
+            <div><dt>Estimated stay</dt><dd>₹{{ "{:,}".format(destination["budget_min"]) }}–₹{{ "{:,}".format(destination["budget_max"]) }}</dd></div>
+            <div><dt>Suggested time</dt><dd>{{ destination["days_min"] }}–{{ destination["days_max"] }} days</dd></div>
+            <div><dt>Best season</dt><dd>{{ destination["best_time"] }}</dd></div>
+          </dl>
+          <details class="why-details">
+            <summary class="button button-why">Why Recommended?</summary>
+            <div class="why-content">
+              <p class="why-goal">{{ destination["proof"]["goal"] }}</p>
+              <p class="backward-note"><strong>Backward chaining:</strong> {{ destination["proof"]["conclusion"] }}</p>
+              <p class="rule-label">Rules checked against your preferences</p>
+              <ul class="rule-list">
+                {% for check in destination["proof"]["checks"] %}
+                  <li class="{% if check['matched'] %}rule-matched{% else %}rule-unmatched{% endif %}">
+                    <span aria-hidden="true">{% if check["matched"] %}✓{% else %}–{% endif %}</span>
+                    {{ check["matched_text"] if check["matched"] else check["missed_text"] }}
+                  </li>
+                {% endfor %}
+              </ul>
+              <p class="applied-rule"><strong>Final rule:</strong> {{ destination["proof"]["applied_rule"] }}</p>
+            </div>
+          </details>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+
+  <p class="estimate-note">Budget estimates are for one person's stay, meals and local travel. Transport to the destination is separate; actual costs vary by season.</p>
+  <div class="results-next">
+    <div><span class="eyebrow">Ready to dream up another trip?</span><h2>Different mood, different map.</h2></div>
+    <a class="button button-dark" href="{{ url_for('plan_trip') }}">Try another set of clues <span aria-hidden="true">→</span></a>
+  </div>
+</section>
+{% endblock %}

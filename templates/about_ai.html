@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}How recommendations work{% endblock %}
+
+{% block content %}
+<section class="about-page">
+  <div class="about-hero">
+    <span class="eyebrow eyebrow-light">A little logic, a lot of clarity</span>
+    <h1>Smart, in a way<br>you can <span>understand.</span></h1>
+    <p>This project recommends trips with a small knowledge base and IF–THEN rules. No machine learning and no external AI service—just clear rules you can read and explain.</p>
+  </div>
+
+  <div class="about-content">
+    <section class="about-block">
+      <div class="about-step-number">01</div>
+      <div>
+        <span class="eyebrow">The knowledge base</span>
+        <h2>Ten places, described with simple facts.</h2>
+        <p>Each destination has an estimated starting budget, a suggested number of days and one or more types, like nature, beach or culture. These facts are stored in <code>knowledge_base.py</code>.</p>
+        <div class="knowledge-chips">
+          {% for item in [
+            "Manali", "Goa", "Jaipur", "Munnar", "Rishikesh",
+            "Varanasi", "Ladakh", "Agra", "Andaman Islands", "Darjeeling"
+          ] %}<span>{{ item }}</span>{% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section class="about-block">
+      <div class="about-step-number">02</div>
+      <div>
+        <span class="eyebrow">Forward chaining</span>
+        <h2>Start with your facts. Apply the rules.</h2>
+        <p>The program starts with your budget, trip length and preferred destination type. It checks all three against each place and puts the places with the most matches first.</p>
+        <div class="rule-example">
+          <span>IF</span> your budget covers a place's estimated starting cost
+          <span>THEN</span> its budget rule matches.
+        </div>
+        <div class="rule-example">
+          <span>IF</span> your trip length fits the suggested visit
+          <span>THEN</span> its duration rule matches.
+        </div>
+        <div class="rule-example">
+          <span>IF</span> a place fits your preferred type
+          <span>THEN</span> its destination-type rule matches.
+        </div>
+      </div>
+    </section>
+
+    <section class="about-block">
+      <div class="about-step-number">03</div>
+      <div>
+        <span class="eyebrow">Backward chaining</span>
+        <h2>Start with a recommendation. Trace back why.</h2>
+        <p>When you open “Why Recommended?”, the program starts with the question “Why is this place in the top three?” It works backwards: it checks the rules that could support the answer, then checks your original preferences.</p>
+        <p>If at least two rules match, the place is marked as a strong match. If there are fewer, the system explains that it was included as one of the three highest-ranked options.</p>
+      </div>
+    </section>
+
+    <section class="about-footnote">
+      <span class="eyebrow">A note about the estimates</span>
+      <p>Destination costs are sample values for a college project—not live prices. They represent a rough stay, meals and local travel estimate for one person, excluding travel to the destination.</p>
+    </section>
+  </div>
+</section>
+{% endblock %}

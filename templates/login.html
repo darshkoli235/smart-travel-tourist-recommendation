@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Sign in{% endblock %}
+
+{% block content %}
+<section class="auth-page auth-page-login">
+  <div class="auth-story">
+    <span class="eyebrow eyebrow-light">Good to see you again</span>
+    <h1>Your next<br>good trip is<br><span>still out there.</span></h1>
+    <p>Pick up where you left off, or start with a brand-new set of travel preferences.</p>
+    <div class="auth-story-art auth-story-art-sunrise" aria-hidden="true"><div></div><span></span></div>
+  </div>
+
+  <div class="auth-card">
+    <a class="back-link" href="{{ url_for('home') }}">← Back to home</a>
+    <span class="eyebrow">Welcome back</span>
+    <h2>Sign in</h2>
+    <p class="auth-subtitle">Your travel ideas are right where you left them.</p>
+
+    <form method="post" class="form-stack">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <label for="email">Email address</label>
+      <input id="email" name="email" type="email" autocomplete="email" value="{{ email }}" required>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required>
+      <button class="button button-dark button-full" type="submit">Sign in <span aria-hidden="true">→</span></button>
+    </form>
+    <p class="auth-switch">New here? <a href="{{ url_for('register') }}">Create an account</a></p>
+  </div>
+</section>
+{% endblock %}
